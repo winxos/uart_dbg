@@ -26,6 +26,8 @@ uint8_t loc_x, loc_y;
 void oled_clear(void)
 {
 	memset(_buf, 0x00, sizeof(_buf));
+	loc_x = 0;
+	loc_y = 0;
 }
 void oled_pixel(uint8_t x, uint8_t y, uint8_t mode)
 {
@@ -105,7 +107,7 @@ void oled_input_ch(char ch)
 }
 void oled_input(char *ch)
 {
-	while(*ch)
+	while (*ch)
 	{
 		oled_input_ch(*ch);
 		ch++;
@@ -171,14 +173,32 @@ void oled_init(void)
 	oled_clear();
 	oled_refresh();
 }
-
+void logo()
+{
+	for (int i = 0; i < 200; i++)
+	{
+		oled_putchar((rand() % 60 + '0'), rand() % 21 * 6, rand() % 4);
+		oled_refresh();
+	}
+	for (int i = 0; i < 21; i++)
+	{
+		oled_putchar(128, i * 6, 0);
+		oled_putchar(128, i * 6, 1);
+		oled_putchar(128, i * 6, 2);
+		oled_putchar(128, i * 6, 3);
+		oled_refresh();
+		HAL_Delay(50);
+	}
+	oled_clear();
+}
 void drv_uart_init();
 void system_run()
 {
-	HAL_Delay(500); //wait for oled power on
+	HAL_Delay(1000); //wait for oled power on
 	drv_uart_init();
 	oled_init();
-	oled_input("MINI SERIAL DEBUGGER\n");
+	logo();
+	oled_input("SERIAL DEBUGGER\n");
 	oled_input("        wvv 20211125\n");
 	oled_input("SUPPORT TTL/RS485\n");
 	oled_input("PIN   +5v - tx rx a b");

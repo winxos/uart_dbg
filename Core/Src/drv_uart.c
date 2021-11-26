@@ -50,7 +50,6 @@ void drv_uart_idle()
 		_uarts[0].timeout++;
 		if (_uarts[0].timeout >= 3)
 		{
-			oled_input("[0]->");
 			for (uint8_t i = 0; i < _uarts[0].len; i++)
 			{
 				oled_input_ch(_uarts[0].rxbuf[i]);
@@ -66,12 +65,7 @@ void drv_uart_idle()
 		_uarts[1].timeout++;
 		if (_uarts[1].timeout >= 3)
 		{
-			oled_input("[1]->");
-			for (uint8_t i = 0; i < _uarts[1].len; i++)
-			{
-				oled_input_ch(_uarts[1].rxbuf[i]);
-			}
-			HAL_UART_Transmit(&huart1, _uarts[1].rxbuf, _uarts[1].len, 0xffff);  //transparent to uart2
+			HAL_UART_Transmit(&huart1, _uarts[1].rxbuf, _uarts[1].len, 0xffff);  //transparent to uart1
 			_uarts[1].state = S_UART_IDLE;
 			_uarts[1].timeout = 0;
 			_uarts[1].len = 0;
