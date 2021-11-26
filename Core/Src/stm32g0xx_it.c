@@ -56,6 +56,7 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern TIM_HandleTypeDef htim14;
 extern DMA_HandleTypeDef hdma_usart1_rx;
 extern DMA_HandleTypeDef hdma_usart2_rx;
 extern UART_HandleTypeDef huart1;
@@ -173,6 +174,20 @@ void DMA1_Channel2_3_IRQHandler(void)
 }
 
 /**
+  * @brief This function handles TIM14 global interrupt.
+  */
+void TIM14_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM14_IRQn 0 */
+
+  /* USER CODE END TIM14_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim14);
+  /* USER CODE BEGIN TIM14_IRQn 1 */
+
+  /* USER CODE END TIM14_IRQn 1 */
+}
+
+/**
   * @brief This function handles USART1 global interrupt / USART1 wake-up interrupt through EXTI line 25.
   */
 void USART1_IRQHandler(void)
@@ -182,8 +197,6 @@ void USART1_IRQHandler(void)
   /* USER CODE END USART1_IRQn 0 */
   HAL_UART_IRQHandler(&huart1);
   /* USER CODE BEGIN USART1_IRQn 1 */
-  void uart_int();
-  uart_int();
   /* USER CODE END USART1_IRQn 1 */
 }
 
@@ -197,8 +210,6 @@ void USART2_IRQHandler(void)
   /* USER CODE END USART2_IRQn 0 */
   HAL_UART_IRQHandler(&huart2);
   /* USER CODE BEGIN USART2_IRQn 1 */
-  void uart_int();
-  uart_int();
   /* USER CODE END USART2_IRQn 1 */
 }
 

@@ -171,43 +171,13 @@ void oled_init(void)
 	oled_clear();
 	oled_refresh();
 }
-uint8_t rxbuf1[100];
-uint8_t rxbuf2[100];
-void uart_int()
-{
-	if (__HAL_UART_GET_FLAG(&huart1, UART_FLAG_IDLE) != RESET)
-	{
-		__HAL_UART_CLEAR_IDLEFLAG(&huart1);
-		HAL_UART_DMAStop(&huart1);
-		uint8_t len = 100 - __HAL_DMA_GET_COUNTER(huart1.hdmarx);
-		for(uint8_t i =0;i<len;i++)
-		{
-			oled_input_ch(rxbuf1[i]);
-		}
-		HAL_UART_Transmit(&huart2, rxbuf1, len, 0xffff);  //transparent to uart2
-		HAL_UART_Receive_DMA(&huart1, rxbuf1, 100);
-	}
-	if (__HAL_UART_GET_FLAG(&huart2, UART_FLAG_IDLE) != RESET)
-	{
-		__HAL_UART_CLEAR_IDLEFLAG(&huart2);
-		HAL_UART_DMAStop(&huart2);
-		uint8_t len = 100 - __HAL_DMA_GET_COUNTER(huart2.hdmarx);
-		for(uint8_t i =0;i<len;i++)
-		{
-			oled_input_ch(rxbuf2[i]);
-		}
-		HAL_UART_Transmit(&huart1, rxbuf2, len, 0xffff); //transparent to uart1
-		HAL_UART_Receive_DMA(&huart2, rxbuf2, 100);
-	}
-}
+
+void drv_uart_init();
 void system_run()
 {
 	HAL_Delay(500); //wait for oled power on
+	drv_uart_init();
 	oled_init();
-	__HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
-	HAL_UART_Receive_DMA(&huart1, rxbuf1, 100);
-	__HAL_UART_ENABLE_IT(&huart2, UART_IT_IDLE);
-	HAL_UART_Receive_DMA(&huart2, rxbuf2, 100);
 	oled_input("MINI SERIAL DEBUGGER\n");
 	oled_input("        wvv 20211125\n");
 	oled_input("SUPPORT TTL/RS485\n");
